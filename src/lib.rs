@@ -1,0 +1,10 @@
+//! `stem` scores how easy a TypeScript codebase is for a human to follow.
+
+#![warn(clippy::unwrap_used, clippy::expect_used)]
+
+/// Version of this build of `stem`.
+pub const STEM_VERSION: &str = env!("CARGO_PKG_VERSION");
+/// Version of the snapshot file layout.
+pub const SCHEMA_VERSION: u32 = 1;
+/// Version of the counting rules, default thresholds, default ignores and scoring.
+pub const METRICS_VERSION: u32 = 1;

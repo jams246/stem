@@ -1,0 +1,4 @@
+# Keep fixtures and snapshots byte-exact in every checkout, whatever the
+# git line-ending settings; tests build CRLF variants themselves.
+* text=auto eol=lf
+*.sh text eol=lf

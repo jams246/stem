@@ -1,0 +1,38 @@
+[package]
+name = "stem"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.0"
+description = "Scores how easy a TypeScript codebase is for a human to follow"
+license = "MIT"
+publish = false
+
+[[bin]]
+name = "stem"
+path = "src/main.rs"
+
+[dependencies]
+oxc_allocator = "=0.154.0"
+oxc_ast = "=0.154.0"
+oxc_ast_visit = "=0.154.0"
+oxc_parser = "=0.154.0"
+oxc_span = "=0.154.0"
+oxc_syntax = "=0.154.0"
+oxc_resolver = "=11.24.3"
+json-strip-comments = "=3.1.2"
+globset = "=0.4.20"
+walkdir = "=2.5.0"
+rayon = "=1.12.0"
+sha2 = "=0.11.1"
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+clap = { version = "=4.6.7", features = ["derive"] }
+# thiserror: typed library errors, required by the project's Rust guidelines.
+thiserror = "=2.0.21"
+
+[dev-dependencies]
+insta = "=1.49.0"
+jsonschema = "=0.58.6"
+
+[lints.rust]
+unsafe_code = "forbid"
