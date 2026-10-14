@@ -1,0 +1,731 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "stem compare report",
+  "description": "Output of `stem compare --json`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "result",
+    "reasons",
+    "changedCode",
+    "overall",
+    "metrics",
+    "functions",
+    "harder",
+    "easier",
+    "configChanged",
+    "notes",
+    "parseErrors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "result": {
+      "enum": [
+        "pass",
+        "regression"
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "changedCode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "before",
+        "after",
+        "changed",
+        "added",
+        "removed"
+      ],
+      "properties": {
+        "before": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "after": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "changed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "added": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "removed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "overall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "before",
+        "after",
+        "gradeBefore",
+        "gradeAfter"
+      ],
+      "properties": {
+        "before": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "after": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "gradeBefore": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ]
+        },
+        "gradeAfter": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ]
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cognitiveComplexity",
+        "length",
+        "parameters",
+        "vocabulary"
+      ],
+      "properties": {
+        "cognitiveComplexity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "before",
+            "after"
+          ],
+          "properties": {
+            "before": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "after": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "length": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "before",
+            "after"
+          ],
+          "properties": {
+            "before": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "after": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "before",
+            "after"
+          ],
+          "properties": {
+            "before": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "after": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "vocabulary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "before",
+            "after"
+          ],
+          "properties": {
+            "before": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "after": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        }
+      }
+    },
+    "functions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "before",
+        "after"
+      ],
+      "properties": {
+        "before": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "harder": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "path",
+          "name",
+          "line",
+          "status",
+          "metrics",
+          "regression",
+          "hint"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "enum": [
+              "added",
+              "changed"
+            ]
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cognitiveComplexity": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              },
+              "length": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              },
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              },
+              "vocabulary": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "regression": {
+            "type": "boolean"
+          },
+          "hint": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "easier": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "path",
+          "name",
+          "line",
+          "status",
+          "metrics",
+          "regression",
+          "hint"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "enum": [
+              "added",
+              "changed"
+            ]
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cognitiveComplexity": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              },
+              "length": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              },
+              "parameters": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              },
+              "vocabulary": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "before",
+                  "bandBefore",
+                  "after",
+                  "bandAfter"
+                ],
+                "properties": {
+                  "before": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "bandBefore": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "low",
+                          "moderate",
+                          "high",
+                          "veryHigh"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "bandAfter": {
+                    "enum": [
+                      "low",
+                      "moderate",
+                      "high",
+                      "veryHigh"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "regression": {
+            "type": "boolean"
+          },
+          "hint": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "configChanged": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parseErrors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "message"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

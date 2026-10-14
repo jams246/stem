@@ -11,6 +11,7 @@ pub mod json;
 mod jsonc;
 pub mod metric;
 pub mod project;
+pub mod report;
 pub mod scan;
 pub mod score;
 pub mod snapshot;
