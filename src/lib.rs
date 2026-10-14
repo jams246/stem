@@ -2,6 +2,9 @@
 
 #![warn(clippy::unwrap_used, clippy::expect_used)]
 
+pub mod analyze;
+pub mod metric;
+
 /// Version of this build of `stem`.
 pub const STEM_VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Version of the snapshot file layout.
