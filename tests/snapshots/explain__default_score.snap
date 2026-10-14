@@ -1,0 +1,18 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+Score: how much of your code is easy to follow, from 0 to 100
+
+How it works
+  Every function counts by its length, so long functions weigh more.
+  Each metric starts at 100. Each 1% of code that is
+    moderate costs 0.5, high costs 2, very high costs 4.
+  The overall score is the average of the four metrics.
+
+Grades
+  A 85+, B 70+, C 55+, D 25+, E below 25
+
+Changed code
+  The same score, counting only functions you added, changed or
+  removed. Watch this number after a change.

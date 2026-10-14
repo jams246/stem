@@ -1,0 +1,21 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+Parameters: values every caller must pass, in order
+
+Counts
+  +1  each parameter, including a rest parameter (...args)
+  +1  each destructured parameter, so ({ a, b }) counts 1
+  +1  each constructor parameter property (private a: A)
+   0  a TypeScript this: parameter
+
+Bands for this project
+  low 0-3, moderate 4, high 5-6, very high 7+
+
+Why it matters
+  Every caller must know each value and its position. Values of
+  the same type are easy to swap by mistake.
+
+To improve
+  Group related parameters into one options object.

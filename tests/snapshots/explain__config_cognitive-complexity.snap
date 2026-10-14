@@ -1,0 +1,23 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+Cognitive complexity: how hard the logic is to follow
+
+Counts
+  +1  each if, else if, else, ?:, switch, loop and catch
+  +1  each chain of && or || (a && b || c counts 2)
+  +1  for every level an if, ?:, switch, loop or catch is nested in
+  +1  recursion, and labeled break or continue
+   0  ?.  ??  await  try  return
+
+Bands for this project
+  low 0-8, moderate 9-16, high 17-32, very high 33+
+
+Why it matters
+  Every branch is something to keep in mind. Nesting makes the
+  reader hold several conditions at once.
+
+To improve
+  Return early instead of nesting. Name complex conditions.
+  Replace long if/switch chains with a lookup object.

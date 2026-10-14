@@ -1,0 +1,16 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+stem measures how easy TypeScript code is for a person to follow.
+
+Each function gets four numbers:
+  cognitive-complexity  how hard the logic is to follow
+  length                lines of code in the function
+  parameters            values every caller must pass, in order
+  vocabulary            different names the reader must keep track of
+
+Each number falls in a band: low, moderate, high or very high.
+The score (0-100) shows how much of your code sits in the higher bands.
+
+More: stem explain <metric>   or   stem explain score

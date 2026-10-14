@@ -1,0 +1,21 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+Length: lines of code in the function
+
+Counts
+  +1  each line with code on it, including the function's first line
+   0  blank lines and lines with only comments
+   0  lines whose first code belongs to a nested function; a short
+      callback written on its parent's line counts 0 (but weighs 1)
+
+Bands for this project
+  low 0-20, moderate 21-40, high 41-80, very high 81+
+
+Why it matters
+  A long function does not fit on one screen. The reader must
+  scroll and remember earlier parts while reading later ones.
+
+To improve
+  Move a section that does one job into a well-named function.

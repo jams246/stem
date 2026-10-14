@@ -1,0 +1,21 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+Vocabulary: different names the reader must keep track of
+
+Counts
+  +1  each different name in the function: parameters, locals,
+      called functions, imports, property names, JSX names
+   0  repeats of a name, types, keywords, literals, this, super,
+      labels and the function's own name
+
+Bands for this project
+  low 0-12, moderate 13-24, high 25-36, very high 37+
+
+Why it matters
+  People can hold only a few things in mind at once. Each new
+  name is one more thing to remember.
+
+To improve
+  Split the function, or group related values into an object.
