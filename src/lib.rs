@@ -4,6 +4,7 @@
 
 pub mod analyze;
 pub mod metric;
+pub mod score;
 
 /// Version of this build of `stem`.
 pub const STEM_VERSION: &str = env!("CARGO_PKG_VERSION");
