@@ -65,6 +65,11 @@ pub fn compare(
         ));
     }
     let shown = baseline.display().to_string();
+    // Reports name only the file, so output never holds an absolute path and
+    // does not depend on how the path was spelled.
+    let name = baseline
+        .file_name()
+        .map_or_else(|| shown.clone(), |n| n.to_string_lossy().into_owned());
     let baseline = read_baseline(baseline, &shown)?;
     let dir = dir.unwrap_or_else(|| PathBuf::from("."));
     let project = project::discover(&dir)?;
@@ -75,7 +80,7 @@ pub fn compare(
     let text = if json {
         compare_json(&comparison).render()
     } else {
-        compare_text(&comparison, &shown)
+        compare_text(&comparison, &name)
     };
     let outcome = if comparison.regression() {
         Outcome::Regression

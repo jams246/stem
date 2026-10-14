@@ -90,3 +90,37 @@ fn long_lists_should_show_ten_entries_and_a_count() {
         (true, 12)
     );
 }
+
+#[test]
+fn absolute_baseline_path_should_not_appear_in_any_output() {
+    let p = setup("cmp-absolute", &[("a.ts", MODERATE)]);
+    p.write("a.ts", &flat_ifs("process", 3));
+    let absolute = p.path("base.json");
+    let absolute = absolute.to_str().unwrap();
+    let text = stdout(&p.stem(&["compare", absolute]));
+    let json = stdout(&p.stem(&["compare", absolute, "--json"]));
+    let root = p.root.to_str().unwrap();
+    assert_eq!(
+        (
+            text.contains(root),
+            json.contains(root),
+            text.starts_with("stem compare: base.json\n")
+        ),
+        (false, false, true)
+    );
+}
+
+#[test]
+fn baseline_spelling_should_not_change_the_report() {
+    let p = setup("cmp-spelling", &[("a.ts", MODERATE)]);
+    let absolute = p.path("base.json");
+    let relative = stdout(&p.stem(&["compare", "base.json"]));
+    let dotted = stdout(&p.stem(&["compare", "./base.json"]));
+    assert_eq!(
+        (
+            stdout(&p.stem(&["compare", absolute.to_str().unwrap()])),
+            dotted
+        ),
+        (relative.clone(), relative)
+    );
+}
