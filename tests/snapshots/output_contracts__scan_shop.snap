@@ -4,38 +4,35 @@ expression: "texts[0]"
 ---
 stem scan
 
-Overall        77.1  grade B
-  cognitive complexity  54.6   how hard the logic is to follow
-  length                87.3   lines of code in the function
-  parameters            94.0   values every caller must pass, in order
-  vocabulary            72.3   different names the reader must keep track of
+Overall        89.7  grade A
+  cognitive complexity  80.7   how hard the logic is to follow
+  length                89.7   lines of code in the function
+  parameters            95.5   values every caller must pass, in order
+  vocabulary            92.7   different names the reader must keep track of
 Functions      25
 Files          14 scanned, 0 ignored
 
 Most to gain (5)
+  length  length.ts:1
+    length 41 (moderate, aim for 35 or less): lines of code in the function
+    The function is 41 lines long, so a reader must scroll and remember earlier parts.
+    Move a section that does one job into a well-named function.
+  vocabulary  vocabulary.ts:1
+    vocabulary 26 (moderate, aim for 25 or less): different names the reader must keep track of
+    The reader must keep track of 26 different names.
+    Split the function, or group related values into an object.
   parseOrder  src/orders/parse.ts:3
-    cognitive complexity 11 (high, aim for 10 or less): how hard the logic is to follow
-    length 20 (moderate, aim for 15 or less): lines of code in the function
-    vocabulary 21 (high, aim for 20 or less): different names the reader must keep track of
+    cognitive complexity 11 (moderate, aim for 6 or less): how hard the logic is to follow
     if, else and switch branches add 5 of the 11 points, at lines 5-17.
     Replace the chain with a lookup object, or move each decision into its own well-named function.
-  length  length.ts:1
-    length 18 (moderate, aim for 15 or less): lines of code in the function
-    The function is 18 lines long, so a reader must scroll and remember earlier parts.
-    Move a section that does one job into a well-named function.
   other  other.ts:1
-    cognitive complexity 6 (moderate, aim for 5 or less): how hard the logic is to follow
-    catch blocks, recursion and labels add 5 of the 6 points.
+    cognitive complexity 7 (moderate, aim for 6 or less): how hard the logic is to follow
+    catch blocks, recursion and labels add 6 of the 7 points.
     Split the function into smaller, well-named steps.
   branching  branching.ts:1
-    cognitive complexity 7 (moderate, aim for 5 or less): how hard the logic is to follow
+    cognitive complexity 7 (moderate, aim for 6 or less): how hard the logic is to follow
     if, else and switch branches add 6 of the 7 points, at lines 2-11.
     Replace the chain with a lookup object, or move each decision into its own well-named function.
-  logical  logical.ts:1
-    cognitive complexity 10 (moderate, aim for 5 or less): how hard the logic is to follow
-    parameters 4 (moderate, aim for 3 or less): values every caller must pass, in order
-    Chains of && and || add 10 of the 10 points, at lines 2-5.
-    Move each condition into a function whose name says what it checks.
 
 Could not parse (1)
   src/broken.ts: line 2: Expected `}` but found `EOF`

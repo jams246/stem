@@ -33,7 +33,7 @@ fn empty_project_text_should_say_no_functions_were_found() {
 const LOW_F: &str = "export function f() {\n  return 1;\n}\n";
 const LOW_G: &str = "export function g() {\n  return 2;\n}\n";
 const LOW_H: &str = "export function h() {\n  return 3;\n}\n";
-const MODERATE_F: &str = "export function f(x: number) {\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n}\n";
+const MODERATE_F: &str = "export function f(x: number) {\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n  if (x) {}\n}\n";
 
 fn changed_code(report: &serde_json::Value) -> (Option<f64>, Option<f64>, [u64; 3]) {
     let c = &report["changedCode"];
@@ -69,10 +69,10 @@ fn changed_code_with_both_should_score_each_side() {
     p.write("f.ts", MODERATE_F).write("h.ts", LOW_H);
     p.remove("g.ts");
     let (status, report) = p.compare_json("base.json");
-    // After: f has cognitive 6 (moderate) over 8 of 11 weighted lines:
-    // 1000 - ceil(500 * 8 / 11) = 636, overall (636 + 3000 + 2) / 4 = 909.
+    // After: f has cognitive 7 (moderate) over 9 of 12 weighted lines:
+    // 1000 - ceil(500 * 9 / 12) = 625, overall (625 + 3000 + 2) / 4 = 906.
     assert_eq!(
         (status, changed_code(&report)),
-        (1, (Some(100.0), Some(90.9), [1, 1, 1]))
+        (1, (Some(100.0), Some(90.6), [1, 1, 1]))
     );
 }

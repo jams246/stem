@@ -17,7 +17,9 @@ export function applyDiscounts(order: Order, code?: string): number {
       } else {
         for (const item of order.items) {
           if (item.price > 5) {
-            total = total - 1;
+            if (item.quantity > 1) {
+              total = total - 1;
+            }
           }
         }
       }

@@ -18,7 +18,7 @@
       "const": 1
     },
     "metricsVersion": {
-      "const": 1
+      "const": 2
     },
     "stemVersion": {
       "type": "string"

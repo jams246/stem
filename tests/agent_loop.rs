@@ -34,7 +34,7 @@ fn harder_patch_should_regress_and_fix_patch_should_pass() {
     assert!(
         harder[0]
             .1
-            .starts_with("Nesting adds 10 of the 18 points, at lines 12-19."),
+            .starts_with("Nesting adds 15 of the 24 points, at lines 12-20."),
         "{}",
         harder[0].1
     );

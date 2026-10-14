@@ -50,7 +50,7 @@ fn branching_hint_should_name_points_and_lines() {
 fn loops_hint_should_name_points_and_lines() {
     assert_hint(
         "loops.ts",
-        "Loops add 6 of the 6 points, at lines 3-10.",
+        "Loops add 7 of the 7 points, at lines 3-11.",
         "Move the loop body into a well-named function.",
     );
 }
@@ -59,7 +59,7 @@ fn loops_hint_should_name_points_and_lines() {
 fn other_hint_should_name_points() {
     assert_hint(
         "other.ts",
-        "catch blocks, recursion and labels add 5 of the 6 points.",
+        "catch blocks, recursion and labels add 6 of the 7 points.",
         "Split the function into smaller, well-named steps.",
     );
 }
@@ -68,7 +68,7 @@ fn other_hint_should_name_points() {
 fn length_hint_should_name_the_length() {
     assert_hint(
         "length.ts",
-        "The function is 18 lines long, so a reader must scroll and remember earlier parts.",
+        "The function is 41 lines long, so a reader must scroll and remember earlier parts.",
         "Move a section that does one job into a well-named function.",
     );
 }
@@ -86,7 +86,7 @@ fn parameters_hint_should_name_the_count() {
 fn vocabulary_hint_should_name_the_count() {
     assert_hint(
         "vocabulary.ts",
-        "The reader must keep track of 11 different names.",
+        "The reader must keep track of 26 different names.",
         "Split the function, or group related values into an object.",
     );
 }

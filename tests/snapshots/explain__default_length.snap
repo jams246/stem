@@ -11,7 +11,7 @@ Counts
       callback written on its parent's line counts 0 (but weighs 1)
 
 Bands for this project
-  low 0-15, moderate 16-30, high 31-60, very high 61+
+  low 0-35, moderate 36-80, high 81-125, very high 126+
 
 Why it matters
   A long function does not fit on one screen. The reader must

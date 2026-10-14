@@ -70,10 +70,10 @@ impl Metric {
     /// Default thresholds `[t1, t2, t3]`.
     pub fn default_thresholds(self) -> [u32; 3] {
         match self {
-            Metric::CognitiveComplexity => [5, 10, 25],
-            Metric::Length => [15, 30, 60],
+            Metric::CognitiveComplexity => [6, 20, 50],
+            Metric::Length => [35, 80, 125],
             Metric::Parameters => [3, 4, 6],
-            Metric::Vocabulary => [10, 20, 30],
+            Metric::Vocabulary => [25, 45, 60],
         }
     }
 

@@ -12,7 +12,7 @@ Counts
    0  ?.  ??  await  try  return
 
 Bands for this project
-  low 0-5, moderate 6-10, high 11-25, very high 26+
+  low 0-6, moderate 7-20, high 21-50, very high 51+
 
 Why it matters
   Every branch is something to keep in mind. Nesting makes the

@@ -7,7 +7,7 @@ export function other(n: number): number {
     return 0;
   }
   try {
-    return other(n - 1) + other(n - 2);
+    return other(n - 1) + other(n - 2) + other(n - 3);
   } catch {
     return -1;
   }

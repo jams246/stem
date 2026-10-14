@@ -8,5 +8,6 @@ export function loops(xs: number[]) {
     total += 1;
   } while (total < 10);
   for (const key in xs) total += Number(key);
+  while (total < 0) total += 1;
   return total;
 }
