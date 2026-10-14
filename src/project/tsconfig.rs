@@ -10,11 +10,25 @@ use super::paths::{lexical, shown};
 use crate::error::StemError;
 use crate::jsonc;
 
-/// Patterns together with the folder they are relative to.
+/// Patterns, each with the folder it is relative to.
 #[derive(Clone, Debug)]
-pub struct Patterns {
-    pub base: PathBuf,
-    pub patterns: Vec<String>,
+pub struct Patterns(pub Vec<(PathBuf, String)>);
+
+const CONFIG_DIR: &str = "${configDir}";
+
+/// Splits a path-valued setting into its base folder and the rest. A leading
+/// `${configDir}` means the folder of the leaf config, as in TypeScript 5.5.
+fn expand<'v>(dir: &Path, leaf: &Path, value: &'v str) -> (PathBuf, &'v str) {
+    match value.strip_prefix(CONFIG_DIR) {
+        Some(rest) => (leaf.to_path_buf(), rest.trim_start_matches(['/', '\\'])),
+        None => (dir.to_path_buf(), value),
+    }
+}
+
+/// Absolute path of a path-valued setting.
+fn resolve(dir: &Path, leaf: &Path, value: &str) -> PathBuf {
+    let (base, rest) = expand(dir, leaf, value);
+    lexical(&base.join(rest))
 }
 
 /// The file-selection settings of one tsconfig after `extends` is applied.
@@ -89,7 +103,7 @@ fn merge(base: TsProject, own: TsProject) -> TsProject {
     }
 }
 
-fn read_own(path: &Path, value: &Value) -> Result<TsProject, StemError> {
+fn read_own(path: &Path, value: &Value, leaf: &Path) -> Result<TsProject, StemError> {
     let dir = path.parent().map(Path::to_path_buf).unwrap_or_default();
     let mut own = TsProject {
         dir: dir.clone(),
@@ -99,9 +113,12 @@ fn read_own(path: &Path, value: &Value) -> Result<TsProject, StemError> {
         value
             .get(key)
             .map(|v| {
-                strings(v, path, key).map(|patterns| Patterns {
-                    base: dir.clone(),
-                    patterns,
+                strings(v, path, key).map(|patterns| {
+                    let entries = patterns.iter().map(|p| {
+                        let (base, rest) = expand(&dir, leaf, p);
+                        (base, rest.to_string())
+                    });
+                    Patterns(entries.collect())
                 })
             })
             .transpose()
@@ -110,20 +127,20 @@ fn read_own(path: &Path, value: &Value) -> Result<TsProject, StemError> {
     own.exclude = patterns("exclude")?;
     if let Some(files) = value.get("files") {
         let files = strings(files, path, "files")?;
-        own.files = Some(files.iter().map(|f| lexical(&dir.join(f))).collect());
+        own.files = Some(files.iter().map(|f| resolve(&dir, leaf, f)).collect());
     }
     if let Some(out_dir) = value
         .pointer("/compilerOptions/outDir")
         .and_then(Value::as_str)
     {
-        own.out_dir = Some(lexical(&dir.join(out_dir)));
+        own.out_dir = Some(resolve(&dir, leaf, out_dir));
     }
     if let Some(references) = value.get("references").and_then(Value::as_array) {
         for reference in references {
             let Some(target) = reference.get("path").and_then(Value::as_str) else {
                 return Err(invalid(path, "every reference needs a \"path\""));
             };
-            let target = lexical(&dir.join(target));
+            let target = resolve(&dir, leaf, target);
             let target = if target.is_dir() {
                 target.join("tsconfig.json")
             } else {
@@ -135,8 +152,14 @@ fn read_own(path: &Path, value: &Value) -> Result<TsProject, StemError> {
     Ok(own)
 }
 
-/// Loads `path`, applying its `extends` chain. `depth` guards against cycles.
-pub fn load(path: &Path, depth: usize) -> Result<TsProject, StemError> {
+/// Loads `path`, applying its `extends` chain.
+pub fn load(path: &Path) -> Result<TsProject, StemError> {
+    let leaf = path.parent().map(Path::to_path_buf).unwrap_or_default();
+    load_chain(path, &leaf, 0)
+}
+
+/// Loads one config of a chain started at `leaf`; `depth` guards against cycles.
+fn load_chain(path: &Path, leaf: &Path, depth: usize) -> Result<TsProject, StemError> {
     if depth > 32 {
         return Err(invalid(path, "the extends chain is too deep or circular"));
     }
@@ -154,7 +177,7 @@ pub fn load(path: &Path, depth: usize) -> Result<TsProject, StemError> {
     let mut base = TsProject::default();
     for spec in &extends {
         let target = resolve_extends(&dir, spec, path)?;
-        base = merge(base, load(&target, depth + 1)?);
+        base = merge(base, load_chain(&target, leaf, depth + 1)?);
     }
-    Ok(merge(base, read_own(path, &value)?))
+    Ok(merge(base, read_own(path, &value, leaf)?))
 }

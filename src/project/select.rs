@@ -69,10 +69,10 @@ fn build(globs: &[String], file: &Path) -> Result<GlobSet, StemError> {
 
 fn include_globs(patterns: &Patterns) -> Vec<String> {
     patterns
-        .patterns
+        .0
         .iter()
-        .filter_map(|p| {
-            let abs = absolute_pattern(&patterns.base, p)?;
+        .filter_map(|(base, p)| {
+            let abs = absolute_pattern(base, p)?;
             Some(if names_folder(p) {
                 format!("{abs}/**/*")
             } else {
@@ -83,13 +83,15 @@ fn include_globs(patterns: &Patterns) -> Vec<String> {
 }
 
 fn exclude_globs(project: &TsProject) -> Vec<String> {
-    let patterns = project.exclude.clone().unwrap_or_else(|| Patterns {
-        base: project.dir.clone(),
-        patterns: DEFAULT_EXCLUDES.iter().map(|s| s.to_string()).collect(),
+    let patterns = project.exclude.clone().unwrap_or_else(|| {
+        let defaults = DEFAULT_EXCLUDES
+            .iter()
+            .map(|s| (project.dir.clone(), s.to_string()));
+        Patterns(defaults.collect())
     });
     let mut globs = Vec::new();
-    for p in &patterns.patterns {
-        if let Some(abs) = absolute_pattern(&patterns.base, p) {
+    for (base, p) in &patterns.0 {
+        if let Some(abs) = absolute_pattern(base, p) {
             globs.push(format!("{abs}/**"));
             globs.push(abs);
         }
@@ -119,10 +121,7 @@ pub fn select(
     let include = match (&project.include, &project.files) {
         (Some(patterns), _) => include_globs(patterns),
         (None, Some(_)) => Vec::new(),
-        (None, None) => include_globs(&Patterns {
-            base: project.dir.clone(),
-            patterns: vec!["**/*".to_string()],
-        }),
+        (None, None) => include_globs(&Patterns(vec![(project.dir.clone(), "**/*".to_string())])),
     };
     let include = build(&include, config_path)?;
     let exclude = build(&exclude_globs(project), config_path)?;

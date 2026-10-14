@@ -55,7 +55,7 @@ pub fn discover(dir: &Path) -> Result<Project, StemError> {
         if !seen.insert(config_path.clone()) {
             continue;
         }
-        let project = tsconfig::load(&config_path, 0)?;
+        let project = tsconfig::load(&config_path)?;
         select::select(&project, &config_path, &files, &mut selected)?;
         queue.extend(project.references.iter().rev().cloned());
     }

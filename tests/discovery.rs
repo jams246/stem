@@ -154,3 +154,71 @@ fn folder_without_typescript_should_exit_2() {
     p.write("readme.md", "hi\n");
     assert_eq!(code(&p.stem(&["scan"])), 2);
 }
+
+const CONFIG_DIR_BASE: &str = r#"{
+  "include": ["${configDir}/src"],
+  "exclude": ["${configDir}/src/generated"],
+  "compilerOptions": { "outDir": "${configDir}/build" }
+}"#;
+
+fn config_dir_packages(p: &TempProject) {
+    p.write("configs/tsconfig.base.json", CONFIG_DIR_BASE);
+    for pkg in ["a", "b"] {
+        p.write(
+            &format!("packages/{pkg}/tsconfig.json"),
+            r#"{ "extends": "../../configs/tsconfig.base.json" }"#,
+        )
+        .write(&format!("packages/{pkg}/src/{pkg}.ts"), FN)
+        .write(&format!("packages/{pkg}/other/{pkg}.ts"), FN);
+    }
+}
+
+#[test]
+fn config_dir_include_should_resolve_against_each_leaf_config() {
+    let p = TempProject::new("configdir-leaf");
+    config_dir_packages(&p);
+    p.write("configs/src/base.ts", FN);
+    let a = p.snapshot(&["packages/a"]);
+    let b = p.snapshot(&["packages/b"]);
+    assert_eq!(
+        (paths(&a), paths(&b)),
+        (vec!["src/a.ts".to_string()], vec!["src/b.ts".to_string()])
+    );
+}
+
+#[test]
+fn config_dir_exclude_and_out_dir_should_resolve_against_the_leaf() {
+    let p = TempProject::new("configdir-exclude");
+    config_dir_packages(&p);
+    p.write(
+        "packages/c/tsconfig.json",
+        r#"{ "extends": "../../configs/tsconfig.base.json" }"#,
+    )
+    .write("packages/c/src/c.ts", FN)
+    .write("packages/c/src/generated/g.ts", FN);
+    let explicit = paths(&p.snapshot(&["packages/c"]));
+    p.write(
+        "configs/tsconfig.base.json",
+        r#"{ "include": ["${configDir}/src"], "compilerOptions": { "outDir": "${configDir}/src/generated" } }"#,
+    );
+    let out_dir = paths(&p.snapshot(&["packages/c"]));
+    assert_eq!(
+        (explicit, out_dir),
+        (vec!["src/c.ts".to_string()], vec!["src/c.ts".to_string()])
+    );
+}
+
+#[test]
+fn solution_references_extending_a_config_dir_base_should_find_every_package_once() {
+    let p = TempProject::new("configdir-solution");
+    config_dir_packages(&p);
+    p.write(
+        "tsconfig.json",
+        r#"{ "files": [], "references": [{ "path": "./packages/a" }, { "path": "./packages/b" }, { "path": "./packages/a/tsconfig.json" }] }"#,
+    );
+    let snap = p.snapshot(&[]);
+    assert_eq!(
+        common::ids(&snap),
+        vec!["packages/a/src/a.ts::f", "packages/b/src/b.ts::f"]
+    );
+}
