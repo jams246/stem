@@ -5,11 +5,12 @@ expression: "texts[2]"
 stem compare: base.json
 
 Changed code   100.0 -> 100.0  (+0.0)    1 changed, 2 added, 0 removed
-Overall        89.7 -> 89.5  (-0.2)    grade A -> A
+Overall        90.7 -> 90.6  (-0.1)    grade A -> A
   cognitive complexity  80.7 -> 80.5    (-0.2)
   length                89.7 -> 89.6    (-0.1)
   parameters            95.5 -> 95.4    (-0.1)
   vocabulary            92.7 -> 92.6    (-0.1)
+  usage gap             95.0 -> 94.9    (-0.1)
 Functions      25 -> 27      (+2)
 
 Harder to follow (1)

@@ -15,10 +15,10 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": 1
+      "const": 2
     },
     "metricsVersion": {
-      "const": 2
+      "const": 3
     },
     "stemVersion": {
       "type": "string"
@@ -44,7 +44,8 @@
             "cognitiveComplexity",
             "length",
             "parameters",
-            "vocabulary"
+            "vocabulary",
+            "usageGap"
           ],
           "properties": {
             "cognitiveComplexity": {
@@ -75,6 +76,15 @@
               "maxItems": 3
             },
             "vocabulary": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "usageGap": {
               "type": "array",
               "items": {
                 "type": "integer",
@@ -160,7 +170,8 @@
             "cognitiveComplexity",
             "length",
             "parameters",
-            "vocabulary"
+            "vocabulary",
+            "usageGap"
           ],
           "properties": {
             "cognitiveComplexity": {
@@ -334,6 +345,49 @@
                   }
                 }
               }
+            },
+            "usageGap": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "lines"
+              ],
+              "properties": {
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "lines": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "low",
+                    "moderate",
+                    "high",
+                    "veryHigh"
+                  ],
+                  "properties": {
+                    "low": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "moderate": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "high": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "veryHigh": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -351,8 +405,10 @@
           "length",
           "parameters",
           "vocabulary",
+          "usageGap",
           "increments",
-          "hash"
+          "hash",
+          "usageGapEvidence"
         ],
         "properties": {
           "id": {
@@ -412,7 +468,50 @@
           "hash": {
             "type": "string",
             "pattern": "^sha256:[0-9a-f]{64}$"
+          },
+          "usageGap": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "usageGapEvidence": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/usageGapEvidence"
+              }
+            ]
           }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "usageGapEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "declarationLine",
+        "fromLine",
+        "toLine"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "declarationLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "fromLine": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "toLine": {
+          "type": "integer",
+          "minimum": 1
         }
       }
     }

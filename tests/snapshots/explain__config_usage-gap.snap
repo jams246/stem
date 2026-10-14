@@ -1,0 +1,24 @@
+---
+source: tests/explain.rs
+expression: "explain(&p, topic)"
+---
+Usage gap: most statements between references to a local variable
+
+Counts
+  Largest gap between consecutive declarations/uses of a const/let/var.
+  Count whole intervening statements, including nested body statements.
+  Ignore braces, labels, empty statements, comments and blank lines.
+  Parameters, captures and type-only references do not count as uses.
+  Nested function/class/namespace bodies are separate. Adjacent uses: 0.
+  Example: declaration, ten statements, use gives 10. No eligible pairs: 0.
+
+Bands for this project
+  low 0-2, moderate 3-5, high 6-9, very high 10+
+
+Why it matters
+  A gap interrupts reading continuity. Intervening code may be related;
+  long-lived values can legitimately have large gaps.
+
+To improve
+  Review moving the declaration closer or grouping related work,
+  while preserving dependencies and execution order.

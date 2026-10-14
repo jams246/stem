@@ -4,11 +4,12 @@ expression: "texts[0]"
 ---
 stem scan
 
-Overall        89.7  grade A
+Overall        90.7  grade A
   cognitive complexity  80.7   how hard the logic is to follow
   length                89.7   lines of code in the function
   parameters            95.5   values every caller must pass, in order
   vocabulary            92.7   different names the reader must keep track of
+  usage gap             95.0   most statements between consecutive references to a local variable
 Functions      25
 Files          14 scanned, 0 ignored
 
@@ -17,14 +18,16 @@ Most to gain (5)
     length 41 (moderate, aim for 35 or less): lines of code in the function
     The function is 41 lines long, so a reader must scroll and remember earlier parts.
     Move a section that does one job into a well-named function.
+  parseOrder  src/orders/parse.ts:3
+    cognitive complexity 11 (moderate, aim for 6 or less): how hard the logic is to follow
+    usage gap 6 (moderate, aim for 3 or less): most statements between consecutive references to a local variable
+    order: references at lines 7 and 16; declared at line 7.
+    if, else and switch branches add 5 of the 11 points, at lines 5-17.
+    Replace the chain with a lookup object, or move each decision into its own well-named function.
   vocabulary  vocabulary.ts:1
     vocabulary 26 (moderate, aim for 25 or less): different names the reader must keep track of
     The reader must keep track of 26 different names.
     Split the function, or group related values into an object.
-  parseOrder  src/orders/parse.ts:3
-    cognitive complexity 11 (moderate, aim for 6 or less): how hard the logic is to follow
-    if, else and switch branches add 5 of the 11 points, at lines 5-17.
-    Replace the chain with a lookup object, or move each decision into its own well-named function.
   other  other.ts:1
     cognitive complexity 7 (moderate, aim for 6 or less): how hard the logic is to follow
     catch blocks, recursion and labels add 6 of the 7 points.

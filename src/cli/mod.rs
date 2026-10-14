@@ -48,7 +48,7 @@ enum Command {
     },
     /// Explain a metric or the score
     Explain {
-        /// cognitive-complexity, length, parameters, vocabulary or score
+        /// cognitive-complexity, length, parameters, vocabulary, usage-gap or score
         topic: Option<String>,
     },
 }

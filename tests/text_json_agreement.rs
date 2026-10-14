@@ -40,11 +40,12 @@ fn metric_value(text_block: &str, label: &str) -> Option<String> {
     Some(rest.split(" (").next()?.to_string())
 }
 
-const METRICS: [(&str, &str); 4] = [
+const METRICS: [(&str, &str); 5] = [
     ("cognitiveComplexity", "cognitive complexity"),
     ("length", "length"),
     ("parameters", "parameters"),
     ("vocabulary", "vocabulary"),
+    ("usageGap", "usage gap"),
 ];
 
 #[test]

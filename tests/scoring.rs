@@ -46,14 +46,14 @@ fn penalty_that_is_not_whole_tenths_should_round_the_score_down() {
 }
 
 #[test]
-fn average_ending_in_five_hundredths_should_round_half_up() {
-    // (1000 + 1000 + 1000 + 998) / 4 = 999.5 tenths, so 100.0.
-    assert_eq!(overall_score10([1000, 1000, 1000, 998]), 1000);
+fn five_metric_average_above_half_should_round_up() {
+    // The five-metric average is 999.6 tenths, so 100.0.
+    assert_eq!(overall_score10([1000, 1000, 1000, 1000, 998]), 1000);
 }
 
 #[test]
 fn average_below_half_should_round_down() {
-    assert_eq!(overall_score10([1000, 1000, 1000, 997]), 999);
+    assert_eq!(overall_score10([1000, 1000, 1000, 1000, 997]), 999);
 }
 
 #[test]

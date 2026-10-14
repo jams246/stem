@@ -4,12 +4,13 @@ expression: "texts[1]"
 ---
 stem compare: base.json
 
-Changed code   100.0 -> 75.0  (-25.0)   1 changed, 0 added, 0 removed
-Overall        89.7 -> 85.3  (-4.4)    grade A -> A
+Changed code   100.0 -> 80.0  (-20.0)   1 changed, 0 added, 0 removed
+Overall        90.7 -> 87.3  (-3.4)    grade A -> A
   cognitive complexity  80.7 -> 62.0    (-18.7)
   length                89.7 -> 90.3    (+0.6)
   parameters            95.5 -> 95.7    (+0.2)
   vocabulary            92.7 -> 93.1    (+0.4)
+  usage gap             95.0 -> 95.2    (+0.2)
 Functions      25 -> 25      (+0)
 
 Harder to follow (1)
@@ -24,5 +25,5 @@ Could not parse (1)
   src/broken.ts: line 2: Expected `}` but found `EOF`
 
 Result: harder to follow. applyDiscounts entered the high band for cognitive complexity.
-  The changed-code score fell from 100.0 to 75.0.
+  The changed-code score fell from 100.0 to 80.0.
 Learn what a metric measures: stem explain <metric>

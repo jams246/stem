@@ -2,14 +2,14 @@
 
 use std::fmt::Write as _;
 
-use super::format::{LEARN_LINE, location, metric_line};
+use super::format::{LEARN_LINE, location, metric_line, usage_gap_location};
 use crate::analyze::FunctionMetrics;
 use crate::hints::hint;
 use crate::json::Json;
 use crate::metric::{Band, Metric, Thresholds};
 use crate::scan::Scan;
 use crate::score::{potential, summarize, tenths};
-use crate::snapshot::{config_json, files_json, summary_json};
+use crate::snapshot::{config_json, files_json, summary_json, usage_gap_json};
 use crate::{METRICS_VERSION, SCHEMA_VERSION, STEM_VERSION};
 
 /// Up to five functions with the most to gain, most first, ties by ID.
@@ -64,6 +64,11 @@ pub fn scan_text(scan: &Scan) -> String {
             for metric in raised_metrics(function, thresholds) {
                 let line = metric_line(metric, None, function.value(metric), thresholds);
                 let _ = writeln!(out, "    {line}");
+                if metric == Metric::UsageGap
+                    && let Some(at) = usage_gap_location(function)
+                {
+                    let _ = writeln!(out, "    {at}");
+                }
             }
             if let Some(hint) = hint(function, thresholds) {
                 let _ = writeln!(out, "    {}\n    {}", hint.found, hint.action);
@@ -105,6 +110,10 @@ fn top_json(function: &FunctionMetrics, potential: u64, thresholds: &Thresholds)
         ("potential", Json::int(potential)),
         ("metrics", Json::Obj(metrics)),
         ("hint", hint),
+        (
+            "usageGapEvidence",
+            usage_gap_json(function.usage_gap_evidence.as_ref()),
+        ),
     ])
 }
 

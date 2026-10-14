@@ -1,10 +1,11 @@
-//! Per-file measurement: parse, find functions, compute the four metrics.
+//! Per-file measurement: parse, find functions, compute the five metrics.
 
 mod collector;
 mod flow;
 mod hash;
 pub mod lines;
 mod naming;
+mod usage_gap;
 mod visit;
 
 use std::borrow::Cow;
@@ -14,11 +15,13 @@ use std::path::Path;
 use oxc_allocator::Allocator;
 use oxc_ast_visit::Visit;
 use oxc_parser::{ParseOptions, Parser};
+use oxc_semantic::SemanticBuilder;
 use oxc_span::SourceType;
 
 use crate::metric::Metric;
 use collector::Collector;
 use lines::LineIndex;
+pub use usage_gap::UsageGapEvidence;
 
 /// One Cognitive Complexity increment.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -36,8 +39,9 @@ pub struct FunctionMetrics {
     pub id: String,
     pub line: u32,
     /// Values in [`Metric::ALL`] order.
-    pub values: [u32; 4],
+    pub values: [u32; 5],
     pub increments: Vec<Increment>,
+    pub usage_gap_evidence: Option<UsageGapEvidence>,
     pub hash: String,
 }
 
@@ -113,7 +117,13 @@ pub fn analyze_source(path: &str, raw: &str) -> FileOutcome {
     if parsed.fatal_error {
         return FileOutcome::ParseError("the file could not be parsed".to_string());
     }
-    let mut collector = Collector::new(&index);
+    let semantic = SemanticBuilder::new()
+        .with_check_syntax_error(false)
+        .with_build_nodes(false)
+        .with_class_table(false)
+        .build(&parsed.program)
+        .semantic;
+    let mut collector = Collector::new(&index, semantic.scoping());
     collector.visit_program(&parsed.program);
     let records = collector.records;
 
@@ -148,8 +158,10 @@ pub fn analyze_source(path: &str, raw: &str) -> FileOutcome {
                     length,
                     record.parameters,
                     record.vocabulary,
+                    record.usage_gap.0,
                 ],
                 increments: record.increments,
+                usage_gap_evidence: record.usage_gap.1,
                 hash: record.hash,
             }
         })

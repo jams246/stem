@@ -3,7 +3,7 @@
 use std::fmt::Write as _;
 
 use super::compare::{Comparison, Entry, Status};
-use super::format::{LEARN_LINE, column, location, metric_line, row};
+use super::format::{LEARN_LINE, column, location, metric_line, row, usage_gap_location};
 use crate::metric::Metric;
 use crate::score::{signed_tenths, tenths};
 
@@ -37,6 +37,11 @@ fn write_entry(out: &mut String, entry: &Entry<'_>, c: &Comparison<'_>) {
     for change in &entry.changes {
         let line = metric_line(change.metric, change.before, change.after, &c.thresholds);
         let _ = writeln!(out, "    {line}");
+        if change.metric == Metric::UsageGap
+            && let Some(at) = usage_gap_location(entry.function)
+        {
+            let _ = writeln!(out, "    {at}");
+        }
     }
     if let Some(hint) = &entry.hint {
         let _ = writeln!(out, "    {}\n    {}", hint.found, hint.action);

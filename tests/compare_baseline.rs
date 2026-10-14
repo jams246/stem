@@ -21,10 +21,10 @@ fn names(report: &serde_json::Value, list: &str) -> usize {
 
 #[test]
 fn baseline_with_another_metrics_version_should_exit_2() {
-    // A metricsVersion 1 baseline was scored with the old default thresholds.
+    // A metricsVersion 2 baseline has no usage-gap measurement.
     let p = setup("cmp-version", &[("a.ts", MODERATE)]);
     let original = p.read("base.json");
-    let edited = original.replace("\"metricsVersion\": 2", "\"metricsVersion\": 1");
+    let edited = original.replace("\"metricsVersion\": 3", "\"metricsVersion\": 2");
     assert_ne!(edited, original);
     p.write("base.json", &edited);
     let output = p.stem(&["compare", "base.json"]);
@@ -39,7 +39,7 @@ fn baseline_with_another_schema_version_should_exit_2() {
     let p = setup("cmp-schema", &[("a.ts", MODERATE)]);
     let edited = p
         .read("base.json")
-        .replace("\"schemaVersion\": 1", "\"schemaVersion\": 7");
+        .replace("\"schemaVersion\": 2", "\"schemaVersion\": 7");
     p.write("base.json", &edited);
     assert_eq!(code(&p.stem(&["compare", "base.json"])), 2);
 }

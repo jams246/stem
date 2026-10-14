@@ -36,6 +36,16 @@ pub fn location(function: &FunctionMetrics) -> String {
     format!("{}  {}:{}", function.name(), function.path(), function.line)
 }
 
+/// Source evidence shown whenever a positive usage gap is listed.
+pub fn usage_gap_location(function: &FunctionMetrics) -> Option<String> {
+    function.usage_gap_evidence.as_ref().map(|e| {
+        format!(
+            "{}: references at lines {} and {}; declared at line {}.",
+            e.name, e.from_line, e.to_line, e.declaration_line,
+        )
+    })
+}
+
 /// Pads `text` to `width`, keeping at least two spaces before the next column.
 pub fn column(text: &str, width: usize) -> String {
     let width = width.max(text.len() + 2);

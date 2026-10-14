@@ -6,7 +6,7 @@ use std::path::Path;
 use serde::Deserialize;
 use serde_json::Value;
 
-use crate::analyze::{FunctionMetrics, Increment};
+use crate::analyze::{FunctionMetrics, Increment, UsageGapEvidence};
 use crate::config::{self, Config};
 use crate::error::StemError;
 use crate::{METRICS_VERSION, SCHEMA_VERSION};
@@ -37,6 +37,9 @@ struct RawFunction {
     length: u32,
     parameters: u32,
     vocabulary: u32,
+    usage_gap: u32,
+    #[serde(deserialize_with = "Option::deserialize")]
+    usage_gap_evidence: Option<UsageGapEvidence>,
     increments: Vec<RawIncrement>,
     hash: String,
 }
@@ -84,7 +87,14 @@ pub fn read_baseline(path: &Path, shown: &str) -> Result<Baseline, StemError> {
         .map(|f| FunctionMetrics {
             id: f.id,
             line: f.line,
-            values: [f.cognitive_complexity, f.length, f.parameters, f.vocabulary],
+            values: [
+                f.cognitive_complexity,
+                f.length,
+                f.parameters,
+                f.vocabulary,
+                f.usage_gap,
+            ],
+            usage_gap_evidence: f.usage_gap_evidence,
             increments: f
                 .increments
                 .into_iter()

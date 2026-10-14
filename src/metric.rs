@@ -1,6 +1,6 @@
 //! Metric and band definitions shared by scanning, scoring and reporting.
 
-/// One of the four per-function measurements.
+/// One of the five per-function measurements.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Metric {
     /// How hard the logic is to follow.
@@ -11,15 +11,18 @@ pub enum Metric {
     Parameters,
     /// Different names the reader must keep track of.
     Vocabulary,
+    /// Most statements between consecutive references to a local variable.
+    UsageGap,
 }
 
 impl Metric {
     /// All metrics in their fixed reporting order.
-    pub const ALL: [Metric; 4] = [
+    pub const ALL: [Metric; 5] = [
         Metric::CognitiveComplexity,
         Metric::Length,
         Metric::Parameters,
         Metric::Vocabulary,
+        Metric::UsageGap,
     ];
 
     /// Position of the metric in [`Metric::ALL`].
@@ -34,6 +37,7 @@ impl Metric {
             Metric::Length => "length",
             Metric::Parameters => "parameters",
             Metric::Vocabulary => "vocabulary",
+            Metric::UsageGap => "usage-gap",
         }
     }
 
@@ -44,6 +48,7 @@ impl Metric {
             Metric::Length => "length",
             Metric::Parameters => "parameters",
             Metric::Vocabulary => "vocabulary",
+            Metric::UsageGap => "usageGap",
         }
     }
 
@@ -54,6 +59,7 @@ impl Metric {
             Metric::Length => "length",
             Metric::Parameters => "parameters",
             Metric::Vocabulary => "vocabulary",
+            Metric::UsageGap => "usage gap",
         }
     }
 
@@ -64,6 +70,9 @@ impl Metric {
             Metric::Length => "lines of code in the function",
             Metric::Parameters => "values every caller must pass, in order",
             Metric::Vocabulary => "different names the reader must keep track of",
+            Metric::UsageGap => {
+                "most statements between consecutive references to a local variable"
+            }
         }
     }
 
@@ -74,6 +83,7 @@ impl Metric {
             Metric::Length => [35, 80, 125],
             Metric::Parameters => [3, 4, 6],
             Metric::Vocabulary => [25, 45, 60],
+            Metric::UsageGap => [3, 16, 28],
         }
     }
 
@@ -141,9 +151,9 @@ impl Band {
     }
 }
 
-/// Thresholds for all four metrics.
+/// Thresholds for all five metrics.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct Thresholds(pub [[u32; 3]; 4]);
+pub struct Thresholds(pub [[u32; 3]; 5]);
 
 impl Default for Thresholds {
     fn default() -> Self {

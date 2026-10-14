@@ -148,5 +148,9 @@ pub fn hint(function: &FunctionMetrics, thresholds: &Thresholds) -> Option<Hint>
             found: format!("The reader must keep track of {value} different names."),
             action: "Split the function, or group related values into an object.",
         },
+        Metric::UsageGap => Hint {
+            found: format!("The largest gap leaves {value} statements between references."),
+            action: "Review whether the declaration can move closer to its use, or related work can be grouped while preserving execution order.",
+        },
     })
 }

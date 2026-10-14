@@ -1,6 +1,6 @@
 //! Building snapshot JSON.
 
-use crate::analyze::FunctionMetrics;
+use crate::analyze::{FunctionMetrics, UsageGapEvidence};
 use crate::config::Config;
 use crate::json::Json;
 use crate::metric::{Band, Metric};
@@ -93,8 +93,24 @@ pub fn function_json(function: &FunctionMetrics) -> Json {
         })
         .collect();
     pairs.push(("increments".to_string(), Json::Arr(increments)));
+    pairs.push((
+        "usageGapEvidence".to_string(),
+        usage_gap_json(function.usage_gap_evidence.as_ref()),
+    ));
     pairs.push(("hash".to_string(), Json::str(&function.hash)));
     Json::Obj(pairs)
+}
+
+/// Source locations explaining the maximum gap, or null for a zero gap.
+pub fn usage_gap_json(evidence: Option<&UsageGapEvidence>) -> Json {
+    evidence.map_or(Json::Null, |e| {
+        Json::obj([
+            ("name", Json::str(&e.name)),
+            ("declarationLine", Json::int(e.declaration_line)),
+            ("fromLine", Json::int(e.from_line)),
+            ("toLine", Json::int(e.to_line)),
+        ])
+    })
 }
 
 /// The whole snapshot.

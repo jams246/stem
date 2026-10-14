@@ -4,12 +4,13 @@ mod common;
 
 use common::{TempProject, code, stderr, stdout};
 
-const TOPICS: [Option<&str>; 6] = [
+const TOPICS: [Option<&str>; 7] = [
     None,
     Some("cognitive-complexity"),
     Some("length"),
     Some("parameters"),
     Some("vocabulary"),
+    Some("usage-gap"),
     Some("score"),
 ];
 
@@ -39,7 +40,7 @@ fn every_topic_should_show_the_project_bands_with_a_config() {
     let p = TempProject::new("explain-config");
     p.write(
         "stem.config.json",
-        r#"{ "thresholds": { "cognitiveComplexity": [8, 16, 32], "length": [20, 40, 80], "parameters": [2, 3, 5], "vocabulary": [12, 24, 36] } }"#,
+        r#"{ "thresholds": { "cognitiveComplexity": [8, 16, 32], "length": [20, 40, 80], "parameters": [2, 3, 5], "vocabulary": [12, 24, 36], "usageGap": [2, 5, 9] } }"#,
     );
     for topic in TOPICS {
         insta::assert_snapshot!(format!("config_{}", name(topic)), explain(&p, topic));
@@ -79,7 +80,13 @@ fn every_topic_should_fit_20_lines_of_80_ascii_columns() {
 #[test]
 fn metric_topics_should_have_the_same_five_parts() {
     let p = TempProject::new("explain-parts");
-    for topic in ["cognitive-complexity", "length", "parameters", "vocabulary"] {
+    for topic in [
+        "cognitive-complexity",
+        "length",
+        "parameters",
+        "vocabulary",
+        "usage-gap",
+    ] {
         let text = explain(&p, Some(topic));
         let first = text.lines().next().unwrap_or("");
         let parts = [
@@ -105,6 +112,7 @@ fn unknown_topic_should_exit_2_and_list_the_topics() {
         "length",
         "parameters",
         "vocabulary",
+        "usage-gap",
         "score",
     ]
     .iter()

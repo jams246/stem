@@ -21,6 +21,6 @@ pub mod snapshot;
 /// Version of this build of `stem`.
 pub const STEM_VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Version of the snapshot file layout.
-pub const SCHEMA_VERSION: u32 = 1;
+pub const SCHEMA_VERSION: u32 = 2;
 /// Version of the counting rules, default thresholds, default ignores and scoring.
-pub const METRICS_VERSION: u32 = 2;
+pub const METRICS_VERSION: u32 = 3;

@@ -1,0 +1,7 @@
+{
+  "count": 2,
+  "functions": {
+    "separated": { "cognitiveComplexity": 0, "length": 16, "parameters": 0, "vocabulary": 14, "usageGap": 10 },
+    "grouped": { "cognitiveComplexity": 0, "length": 16, "parameters": 0, "vocabulary": 14, "usageGap": 0 }
+  }
+}

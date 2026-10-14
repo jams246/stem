@@ -8,7 +8,7 @@ How it works
   Every function counts by its length, so long functions weigh more.
   Each metric starts at 100. Each 1% of code that is
     moderate costs 0.5, high costs 2, very high costs 4.
-  The overall score is the average of the four metrics.
+  The overall score is the average of the five metrics.
 
 Grades
   A 85+, B 70+, C 55+, D 25+, E below 25

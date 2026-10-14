@@ -4,7 +4,7 @@ use super::compare::{Comparison, Entry};
 use crate::SCHEMA_VERSION;
 use crate::json::Json;
 use crate::metric::Metric;
-use crate::snapshot::parse_errors_json;
+use crate::snapshot::{parse_errors_json, usage_gap_json};
 
 fn entry_json(entry: &Entry<'_>) -> Json {
     let metrics = entry
@@ -31,6 +31,10 @@ fn entry_json(entry: &Entry<'_>) -> Json {
         ("line", Json::int(f.line)),
         ("status", Json::str(entry.status.key())),
         ("metrics", Json::Obj(metrics)),
+        (
+            "usageGapEvidence",
+            usage_gap_json(f.usage_gap_evidence.as_ref()),
+        ),
         ("regression", Json::Bool(entry.regression)),
         (
             "hint",

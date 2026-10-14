@@ -19,6 +19,7 @@ use oxc_syntax::scope::ScopeFlags;
 use super::collector::{Collector, FunctionStart, Pending};
 use super::hash;
 use super::naming::function_start;
+use super::usage_gap;
 
 fn count(params: &oxc_ast::ast::FormalParameters<'_>) -> u32 {
     let total = params.items.len() + usize::from(params.rest.is_some());
@@ -42,6 +43,7 @@ impl<'a> Visit<'a> for Collector<'a> {
             id,
             parameters: count(&it.params),
             hash: hash::function_hash(it),
+            usage_gap: usage_gap::measure(it.body.as_deref(), self.scoping, self.lines),
         });
         walk::walk_function(self, it, flags);
         self.end_function();
@@ -53,6 +55,7 @@ impl<'a> Visit<'a> for Collector<'a> {
             id: None,
             parameters: count(&it.params),
             hash: hash::arrow_hash(it),
+            usage_gap: usage_gap::measure(it.body.as_function_body(), self.scoping, self.lines),
         });
         walk::walk_arrow_function_expression(self, it);
         self.end_function();

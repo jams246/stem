@@ -13,12 +13,18 @@ fn empty_project_should_score_100_with_a_note() {
     );
     let report = p.scan_json(&[]);
     let summary = &report["summary"];
-    let scores: Vec<f64> = ["cognitiveComplexity", "length", "parameters", "vocabulary"]
-        .iter()
-        .map(|k| summary["metrics"][k]["score"].as_f64().unwrap())
-        .chain([summary["score"].as_f64().unwrap()])
-        .collect();
-    assert_eq!(scores, vec![100.0; 5]);
+    let scores: Vec<f64> = [
+        "cognitiveComplexity",
+        "length",
+        "parameters",
+        "vocabulary",
+        "usageGap",
+    ]
+    .iter()
+    .map(|k| summary["metrics"][k]["score"].as_f64().unwrap())
+    .chain([summary["score"].as_f64().unwrap()])
+    .collect();
+    assert_eq!(scores, vec![100.0; 6]);
     assert_eq!(report["notes"], serde_json::json!(["No functions found."]));
 }
 
@@ -70,9 +76,9 @@ fn changed_code_with_both_should_score_each_side() {
     p.remove("g.ts");
     let (status, report) = p.compare_json("base.json");
     // After: f has cognitive 7 (moderate) over 9 of 12 weighted lines:
-    // 1000 - ceil(500 * 9 / 12) = 625, overall (625 + 3000 + 2) / 4 = 906.
+    // 1000 - ceil(500 * 9 / 12) = 625, overall (625 + 4000 + 2) / 5 = 925.
     assert_eq!(
         (status, changed_code(&report)),
-        (1, (Some(100.0), Some(90.6), [1, 1, 1]))
+        (1, (Some(100.0), Some(92.5), [1, 1, 1]))
     );
 }

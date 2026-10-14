@@ -19,7 +19,7 @@ pub struct Summary {
     pub score10: u32,
     pub functions: usize,
     /// Per metric, in [`Metric::ALL`] order.
-    pub metrics: [MetricSummary; 4],
+    pub metrics: [MetricSummary; 5],
 }
 
 impl Summary {
@@ -45,9 +45,9 @@ pub fn metric_score10(lines: [u64; 4]) -> u32 {
     u32::try_from(1000u128.saturating_sub(penalty)).unwrap_or(0)
 }
 
-/// Average of the four metric scores, rounded half up to tenths.
-pub fn overall_score10(scores: [u32; 4]) -> u32 {
-    (scores.iter().sum::<u32>() + 2) / 4
+/// Average of the five metric scores, rounded to the nearest tenth.
+pub fn overall_score10(scores: [u32; 5]) -> u32 {
+    (scores.iter().sum::<u32>() + 2) / 5
 }
 
 /// Letter grade for a score in tenths.
@@ -66,7 +66,7 @@ pub fn summarize<'a>(
     functions: impl IntoIterator<Item = &'a FunctionMetrics>,
     thresholds: &Thresholds,
 ) -> Summary {
-    let mut lines = [[0u64; 4]; 4];
+    let mut lines = [[0u64; 4]; 5];
     let mut count = 0;
     for function in functions {
         count += 1;

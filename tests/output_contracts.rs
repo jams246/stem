@@ -56,6 +56,10 @@ fn every_metric_line_should_carry_name_value_band_target_and_description() {
             "vocabulary",
             "different names the reader must keep track of",
         ),
+        (
+            "usage gap",
+            "most statements between consecutive references to a local variable",
+        ),
     ];
     let mut checked = 0;
     for text in report_texts("contract-lines") {
@@ -100,6 +104,7 @@ fn every_metric_and_band_name_in_reports_should_appear_in_explain() {
         "length",
         "parameters",
         "vocabulary",
+        "usage-gap",
         "score",
     ]
     .iter()
@@ -124,6 +129,7 @@ fn every_metric_and_band_name_in_reports_should_appear_in_explain() {
         "very high",
         "grade",
         "changed code",
+        "usage gap",
         "score",
     ];
     for name in names {

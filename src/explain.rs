@@ -4,22 +4,24 @@ use crate::error::StemError;
 use crate::metric::{Metric, Thresholds};
 
 /// Every topic `stem explain` accepts, besides the overview.
-pub const TOPICS: [&str; 5] = [
+pub const TOPICS: [&str; 6] = [
     "cognitive-complexity",
     "length",
     "parameters",
     "vocabulary",
+    "usage-gap",
     "score",
 ];
 
 const OVERVIEW: &str = "\
 stem measures how easy TypeScript code is for a person to follow.
 
-Each function gets four numbers:
+Each function gets five numbers:
   cognitive-complexity  how hard the logic is to follow
   length                lines of code in the function
   parameters            values every caller must pass, in order
   vocabulary            different names the reader must keep track of
+  usage-gap             most statements between references to a local variable
 
 Each number falls in a band: low, moderate, high or very high.
 The score (0-100) shows how much of your code sits in the higher bands.
@@ -116,7 +118,7 @@ How it works
   Every function counts by its length, so long functions weigh more.
   Each metric starts at 100. Each 1% of code that is
     moderate costs 0.5, high costs 2, very high costs 4.
-  The overall score is the average of the four metrics.
+  The overall score is the average of the five metrics.
 
 Grades
   A 85+, B 70+, C 55+, D 25+, E below 25
@@ -124,6 +126,29 @@ Grades
 Changed code
   The same score, counting only functions you added, changed or
   removed. Watch this number after a change.
+";
+
+const USAGE_GAP: &str = "\
+Usage gap: most statements between references to a local variable
+
+Counts
+  Largest gap between consecutive declarations/uses of a const/let/var.
+  Count whole intervening statements, including nested body statements.
+  Ignore braces, labels, empty statements, comments and blank lines.
+  Parameters, captures and type-only references do not count as uses.
+  Nested function/class/namespace bodies are separate. Adjacent uses: 0.
+  Example: declaration, ten statements, use gives 10. No eligible pairs: 0.
+
+Bands for this project
+  {bands}
+
+Why it matters
+  A gap interrupts reading continuity. Intervening code may be related;
+  long-lived values can legitimately have large gaps.
+
+To improve
+  Review moving the declaration closer or grouping related work,
+  while preserving dependencies and execution order.
 ";
 
 fn range(low: u32, high: u32) -> String {
@@ -165,6 +190,7 @@ pub fn explain(topic: Option<&str>, thresholds: &Thresholds) -> Result<String, S
         Metric::Length => LENGTH,
         Metric::Parameters => PARAMETERS,
         Metric::Vocabulary => VOCABULARY,
+        Metric::UsageGap => USAGE_GAP,
     };
     Ok(template.replace("{bands}", &bands_line(metric, thresholds)))
 }

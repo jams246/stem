@@ -2,9 +2,11 @@
 
 use std::collections::HashSet;
 
+use oxc_semantic::Scoping;
 use oxc_span::Span;
 
 use super::Increment;
+use super::UsageGapEvidence;
 use super::lines::LineIndex;
 
 /// Raw measurements of one function before lengths and IDs are finalized.
@@ -17,6 +19,7 @@ pub(crate) struct Record {
     pub increments: Vec<Increment>,
     pub parameters: u32,
     pub vocabulary: u32,
+    pub usage_gap: (u32, Option<UsageGapEvidence>),
     pub hash: String,
 }
 
@@ -52,10 +55,12 @@ pub(crate) struct FunctionStart<'a> {
     pub id: Option<&'a str>,
     pub parameters: u32,
     pub hash: String,
+    pub usage_gap: (u32, Option<UsageGapEvidence>),
 }
 
 pub(crate) struct Collector<'a> {
     pub lines: &'a LineIndex,
+    pub scoping: &'a Scoping,
     pub records: Vec<Record>,
     pub frames: Vec<Frame<'a>>,
     pub scopes: Vec<Scope>,
@@ -69,9 +74,10 @@ pub(crate) struct Collector<'a> {
 }
 
 impl<'a> Collector<'a> {
-    pub fn new(lines: &'a LineIndex) -> Self {
+    pub fn new(lines: &'a LineIndex, scoping: &'a Scoping) -> Self {
         Collector {
             lines,
+            scoping,
             records: Vec::new(),
             frames: Vec::new(),
             scopes: vec![Scope {
@@ -157,6 +163,7 @@ impl<'a> Collector<'a> {
             increments: Vec::new(),
             parameters: start.parameters,
             vocabulary: 0,
+            usage_gap: start.usage_gap,
             hash: start.hash,
         });
         self.frames.push(Frame {
