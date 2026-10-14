@@ -36,3 +36,15 @@ jsonschema = "=0.58.6"
 
 [lints.rust]
 unsafe_code = "forbid"
+
+# The profile `make build:production` uses: a fully optimized, stripped build.
+# It inherits from `release` so plain `cargo build --release` stays quick.
+[profile.production]
+inherits = "release"
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+debug = false
+incremental = false
