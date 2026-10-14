@@ -1,0 +1,5 @@
+{
+  // Shop fixture used by determinism, hash and agent-loop tests.
+  "compilerOptions": { "strict": true, "jsx": "react-jsx", "outDir": "build" },
+  "include": ["src"],
+}
