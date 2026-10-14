@@ -3,7 +3,9 @@
 #![warn(clippy::unwrap_used, clippy::expect_used)]
 
 pub mod analyze;
+pub mod config;
 pub mod error;
+pub mod ignore;
 mod jsonc;
 pub mod metric;
 pub mod project;
