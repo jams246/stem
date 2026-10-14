@@ -3,6 +3,7 @@
 #![warn(clippy::unwrap_used, clippy::expect_used)]
 
 pub mod analyze;
+pub mod cli;
 pub mod config;
 pub mod error;
 pub mod explain;
