@@ -74,7 +74,12 @@ pub fn compare(
     let dir = dir.unwrap_or_else(|| PathBuf::from("."));
     let project = project::discover(&dir)?;
     let current_file = config::load(&project.root)?.unwrap_or_default();
-    let config_changed = current_file != baseline.config;
+    // Blind spot: a pattern removed from the file is missed, since flags and file patterns look alike.
+    let config_changed = current_file.thresholds != baseline.config.thresholds
+        || current_file
+            .ignore
+            .iter()
+            .any(|p| !baseline.config.ignore.contains(p));
     let current = scan_project(&project, &baseline.config)?;
     let comparison = compare_scans(&baseline, &current, config_changed);
     let text = if json {

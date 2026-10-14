@@ -124,3 +124,60 @@ fn baseline_spelling_should_not_change_the_report() {
         (relative.clone(), relative)
     );
 }
+
+fn config_changed(p: &TempProject) -> (bool, bool) {
+    let (_, r) = p.compare_json("base.json");
+    let text = stdout(&p.stem(&["compare", "base.json"]));
+    (
+        r["configChanged"].as_bool().unwrap(),
+        text.contains("The config changed since the baseline"),
+    )
+}
+
+fn flagged(tag: &str, config: Option<&str>) -> TempProject {
+    let p = TempProject::new(tag);
+    p.write("src/a.ts", MODERATE)
+        .write("src/old/b.ts", MODERATE);
+    if let Some(config) = config {
+        p.write("stem.config.json", config);
+    }
+    p.baseline("base.json", &["--ignore", "src/old"]);
+    p
+}
+
+#[test]
+fn baseline_with_ignore_flags_and_no_config_file_should_not_note_a_change() {
+    let p = flagged("cfg-flag-none", None);
+    assert_eq!(config_changed(&p), (false, false));
+}
+
+#[test]
+fn baseline_with_ignore_flags_and_an_unchanged_config_file_should_not_note_a_change() {
+    let p = flagged("cfg-flag-same", Some(r#"{ "ignore": ["src/gen"] }"#));
+    assert_eq!(config_changed(&p), (false, false));
+}
+
+#[test]
+fn config_file_adding_an_ignore_pattern_should_note_a_change() {
+    let p = flagged("cfg-flag-added", None);
+    p.write("stem.config.json", r#"{ "ignore": ["src/new"] }"#);
+    assert_eq!(config_changed(&p), (true, true));
+}
+
+#[test]
+fn config_file_changing_a_threshold_should_note_a_change() {
+    let p = flagged("cfg-flag-threshold", None);
+    p.write(
+        "stem.config.json",
+        r#"{ "thresholds": { "length": [10, 20, 40] } }"#,
+    );
+    assert_eq!(config_changed(&p), (true, true));
+}
+
+#[test]
+fn config_file_dropping_a_baseline_pattern_should_not_note_a_change() {
+    // Documents the blind spot: a removed file pattern looks like a flag.
+    let p = flagged("cfg-flag-dropped", Some(r#"{ "ignore": ["src/gen"] }"#));
+    p.write("stem.config.json", "{}");
+    assert_eq!(config_changed(&p), (false, false));
+}
