@@ -3,7 +3,10 @@
 #![warn(clippy::unwrap_used, clippy::expect_used)]
 
 pub mod analyze;
+pub mod error;
+mod jsonc;
 pub mod metric;
+pub mod project;
 pub mod score;
 
 /// Version of this build of `stem`.
