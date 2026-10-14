@@ -5,6 +5,7 @@
 pub mod analyze;
 pub mod config;
 pub mod error;
+pub mod hints;
 pub mod ignore;
 pub mod json;
 mod jsonc;
