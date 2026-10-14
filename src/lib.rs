@@ -6,10 +6,13 @@ pub mod analyze;
 pub mod config;
 pub mod error;
 pub mod ignore;
+pub mod json;
 mod jsonc;
 pub mod metric;
 pub mod project;
+pub mod scan;
 pub mod score;
+pub mod snapshot;
 
 /// Version of this build of `stem`.
 pub const STEM_VERSION: &str = env!("CARGO_PKG_VERSION");

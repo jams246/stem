@@ -1,0 +1,420 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "stem snapshot",
+  "description": "Snapshot written by `stem scan -o`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "metricsVersion",
+    "stemVersion",
+    "config",
+    "files",
+    "summary",
+    "functions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "metricsVersion": {
+      "const": 1
+    },
+    "stemVersion": {
+      "type": "string"
+    },
+    "config": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ignore",
+        "thresholds"
+      ],
+      "properties": {
+        "ignore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "thresholds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cognitiveComplexity",
+            "length",
+            "parameters",
+            "vocabulary"
+          ],
+          "properties": {
+            "cognitiveComplexity": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "length": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "vocabulary": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          }
+        }
+      }
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scanned",
+        "ignored",
+        "parseErrors"
+      ],
+      "properties": {
+        "scanned": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ignored": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parseErrors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "message"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "score",
+        "grade",
+        "functions",
+        "metrics"
+      ],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "grade": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ]
+        },
+        "functions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cognitiveComplexity",
+            "length",
+            "parameters",
+            "vocabulary"
+          ],
+          "properties": {
+            "cognitiveComplexity": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "lines"
+              ],
+              "properties": {
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "lines": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "low",
+                    "moderate",
+                    "high",
+                    "veryHigh"
+                  ],
+                  "properties": {
+                    "low": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "moderate": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "high": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "veryHigh": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "length": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "lines"
+              ],
+              "properties": {
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "lines": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "low",
+                    "moderate",
+                    "high",
+                    "veryHigh"
+                  ],
+                  "properties": {
+                    "low": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "moderate": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "high": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "veryHigh": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "parameters": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "lines"
+              ],
+              "properties": {
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "lines": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "low",
+                    "moderate",
+                    "high",
+                    "veryHigh"
+                  ],
+                  "properties": {
+                    "low": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "moderate": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "high": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "veryHigh": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            },
+            "vocabulary": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "score",
+                "lines"
+              ],
+              "properties": {
+                "score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "lines": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "low",
+                    "moderate",
+                    "high",
+                    "veryHigh"
+                  ],
+                  "properties": {
+                    "low": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "moderate": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "high": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "veryHigh": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "line",
+          "cognitiveComplexity",
+          "length",
+          "parameters",
+          "vocabulary",
+          "increments",
+          "hash"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "::"
+          },
+          "line": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "cognitiveComplexity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "length": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "parameters": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "vocabulary": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "increments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "line",
+                "kind",
+                "base",
+                "nesting"
+              ],
+              "properties": {
+                "line": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "base": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "nesting": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "hash": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  }
+}
