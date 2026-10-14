@@ -1,0 +1,7 @@
+{
+  "count": 2,
+  "functions": {
+    "double": { "length": 3 },
+    "double.<anonymous 1>": { "length": 0 }
+  }
+}

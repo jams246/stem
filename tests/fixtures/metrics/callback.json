@@ -1,0 +1,7 @@
+{
+  "count": 2,
+  "functions": {
+    "f": { "cognitiveComplexity": 0 },
+    "f.<anonymous 1>": { "cognitiveComplexity": 2 }
+  }
+}

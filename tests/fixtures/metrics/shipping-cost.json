@@ -1,0 +1,6 @@
+{
+  "count": 1,
+  "functions": {
+    "shippingCost": { "cognitiveComplexity": 7, "length": 12, "parameters": 1, "vocabulary": 8 }
+  }
+}
