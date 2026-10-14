@@ -1,0 +1,25 @@
+---
+source: tests/output_contracts.rs
+expression: "texts[2]"
+---
+stem compare: base.json
+
+Changed code   100.0 -> 100.0  (+0.0)    1 changed, 2 added, 0 removed
+Overall        77.1 -> 76.7  (-0.4)    grade B -> B
+  cognitive complexity  54.6 -> 54.0    (-0.6)
+  length                87.3 -> 87.1    (-0.2)
+  parameters            94.0 -> 93.9    (-0.1)
+  vocabulary            72.3 -> 71.9    (-0.4)
+Functions      25 -> 27      (+2)
+
+Harder to follow (1)
+  applyDiscounts  src/cart/total.ts:14
+    cognitive complexity 3 -> 2 (low): how hard the logic is to follow
+    length 9 -> 5 (low): lines of code in the function
+    vocabulary 4 -> 9 (low): different names the reader must keep track of
+
+Could not parse (1)
+  src/broken.ts: line 2: Expected `}` but found `EOF`
+
+Result: no regression.
+Learn what a metric measures: stem explain <metric>

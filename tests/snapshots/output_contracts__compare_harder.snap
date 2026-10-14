@@ -1,0 +1,28 @@
+---
+source: tests/output_contracts.rs
+expression: "texts[1]"
+---
+stem compare: base.json
+
+Changed code   100.0 -> 62.5  (-37.5)   1 changed, 0 added, 0 removed
+Overall        77.1 -> 71.0  (-6.1)    grade B -> B
+  cognitive complexity  54.6 -> 33.7    (-20.9)
+  length                87.3 -> 82.1    (-5.2)
+  parameters            94.0 -> 94.3    (+0.3)
+  vocabulary            72.3 -> 74.0    (+1.7)
+Functions      25 -> 25      (+0)
+
+Harder to follow (1)
+  applyDiscounts  src/cart/total.ts:9
+    cognitive complexity 3 -> 18 (high, aim for 10 or less): how hard the logic is to follow
+    length 9 -> 19 (moderate, aim for 15 or less): lines of code in the function
+    vocabulary 4 -> 7 (low): different names the reader must keep track of
+    Nesting adds 10 of the 18 points, at lines 12-19.
+    Return early instead of nesting, so the main path is not indented.
+
+Could not parse (1)
+  src/broken.ts: line 2: Expected `}` but found `EOF`
+
+Result: harder to follow. applyDiscounts entered the high band for cognitive complexity.
+  The changed-code score fell from 100.0 to 62.5.
+Learn what a metric measures: stem explain <metric>
